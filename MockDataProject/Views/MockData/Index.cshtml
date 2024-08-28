@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MockDataProject.Models.MockData>
+
+@{
+    ViewBag.Title = "MockData List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">@ViewBag.Title</h2>
+            <div class="text-right mb-3">
+                <a href="@Url.Action("Create", "MockData")" class="btn btn-success">
+                    <i class="fa fa-plus"></i> Create New
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>MockData Entries</h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="row-@item.Id">
+                                        <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                        <td class="text-right">
+                                            <a href="@Url.Action("Edit", "MockData", new { id = item.Id })" class="btn btn-warning btn-sm">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </a>
+                                            @using (Html.BeginForm("Delete", "MockData", FormMethod.Post, new { @class = "d-inline" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.Hidden("id", item.Id)
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info text-center" role="alert">
+                            No MockData entries found. Click "Create New" to add an entry.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ensure FontAwesome is included for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
